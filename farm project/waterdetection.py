@@ -23,6 +23,6 @@ def Water_detection():
         Blinking_led(red)
         return "water detected"
     else:
-        return "No water detected"
+        return "No water detec"
         
     
