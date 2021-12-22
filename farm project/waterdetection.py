@@ -5,7 +5,7 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
 def Blinking_led(i): #input "i" is bcm(gpio) pin number of led, declair gpio pin in function
-    for j in range(0,3):
+    for _ in range(0,3):
         GPIO.output(i,1)
         sleep(1)
         GPIO.output(i,0)
@@ -17,8 +17,12 @@ def Water_detection():
 
     GPIO.setup(moisture,GPIO.IN)
 
+   
     if not GPIO.input(moisture):
         print("water detected")
         Blinking_led(red)
         return "water detected"
-    return "idk"
+    else:
+        return "No water detected"
+        
+    

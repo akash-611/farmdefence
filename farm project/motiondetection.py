@@ -29,7 +29,7 @@ def Motion_detect():
         i = GPIO.input(pir)
         if i == 1:
             print("intruder detected")
-            update.message.reply_text("intruder detected")
+            update.bot.send_message("intruder detected")
             Buzzer(1)
             Blinking_led(led)
             Buzzer(0)
@@ -39,5 +39,6 @@ def Motion_detect():
 def main():
     updater = Updater(keys.API_KEY,use_context=True)
     dp = updater.dispatcher
+    dp.add_handler(MessageHandler(Filters.text, messagehandling))
     Motion_detect()
     
