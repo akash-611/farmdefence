@@ -21,6 +21,7 @@ def Buzzer(i): #input "i" is 1 == high and 0 == low to turn on and off buzzer
     GPIO.output(buzzer,i)
 
 def Motion_detect():
+    print("motion function started")
     led = 18
     pir = 17
     GPIO.setup(pir,GPIO.IN)
@@ -29,16 +30,26 @@ def Motion_detect():
         i = GPIO.input(pir)
         if i == 1:
             print("intruder detected")
-            update.bot.send_message("intruder detected")
             Buzzer(1)
             Blinking_led(led)
+            TelegramBot()
             Buzzer(0)
             
         i = 0
 
-def main():
+def TelegramBot():
     updater = Updater(keys.API_KEY,use_context=True)
     dp = updater.dispatcher
-    dp.add_handler(MessageHandler(Filters.text, messagehandling))
-    Motion_detect()
+    j = updater.job_queue
+    updater.bot.send_message(chat_id = keys.CHAT_ID, text ="intruder detected")
+    updater.start_polling()
+
+
+def main():
     
+    print("main function running")
+    
+
+    Motion_detect()
+
+main()

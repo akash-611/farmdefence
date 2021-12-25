@@ -1,4 +1,3 @@
-import motiondetection as md
 import waterdetection as wd
 from telegram.ext import *
 import constants as keys
