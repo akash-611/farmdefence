@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 from telegram.ext import *
 import constants as keys
+import irrigation as extinguish
 
 GPIO.cleanup()
 GPIO.setwarnings(False)
@@ -15,40 +16,36 @@ def Blinking_led(i): #input "i" is bcm(gpio) pin number of led, declair gpio pin
         sleep(1)
         GPIO.output(i,0)
 
+
+def TelegramBot():
+    
+    updater.bot.send_message(chat_id = keys.CHAT_ID, text ="fire alert")
+    
+
 def Buzzer(i): #input "i" is 1 == high and 0 == low to turn on and off buzzer
     buzzer = 27
     GPIO.setup(buzzer,GPIO.OUT)
     GPIO.output(buzzer,i)
 
-def Motion_detect():
-    print("motion function started")
-    led = 18
-    pir = 17
-    GPIO.setup(pir,GPIO.IN)
-    GPIO.setup(led,GPIO.OUT)
-    i = GPIO.input(pir)
-    if i == 1:
-        print("intruder detected")
-        Buzzer(1)
-        Blinking_led(led)
-        TelegramBot()
-        Buzzer(0)
-            
-        i = 0
+def Fire_detection():
+    fire = 24
+    red = 25
+    GPIO.setup(red,GPIO.OUT)
 
-def TelegramBot():
+    GPIO.setup(fire,GPIO.IN)
+
+   
+    if not GPIO.input(fire):
+        print("Fire Alert")
+        Blinking_led(red)
+        Buzzer(1)
+        TelegramBot()
+        extinguish.IrrigationMotor()
+        Buzzer(0)
+      
+if __name__ == "__main__":
     updater = Updater(keys.API_KEY,use_context=True)
     dp = updater.dispatcher
     j = updater.job_queue
-    updater.bot.send_message(chat_id = keys.CHAT_ID, text ="intruder detected")
-    updater.start_polling()
-
-
-def main():
-    
-    print("main function running")
-    
-    while (True):
-        Motion_detect()
-
-main()
+    while True:
+        Fire_detection()
