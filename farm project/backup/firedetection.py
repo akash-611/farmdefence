@@ -18,20 +18,15 @@ def Blinking_led(i): #input "i" is bcm(gpio) pin number of led, declair gpio pin
         sleep(1)
 
 
-def TelegramBot(t):
-    updater = Updater(keys.API_KEY,use_context=True)
-    dp = updater.dispatcher
-    j = updater.job_queue
-    for i in keys.CHAT_ID:
-        updater.bot.send_message(chat_id = i, text = t)
+def TelegramBot():
+    
+    updater.bot.send_message(chat_id = keys.CHAT_ID, text ="fire alert")
     
 
-def Buzzer(): #input "i" is 1 == high and 0 == low to turn on and off buzzer
+def Buzzer(i): #input "i" is 1 == high and 0 == low to turn on and off buzzer
     buzzer = 27
     GPIO.setup(buzzer,GPIO.OUT)
-    GPIO.output(buzzer,1)
-    sleep(5)
-    GPIO.output(buzzer,0)
+    GPIO.output(buzzer,i)
 
 def Fire_detection():
     fire = 24
@@ -39,23 +34,20 @@ def Fire_detection():
     GPIO.setup(red,GPIO.OUT)
 
     GPIO.setup(fire,GPIO.IN)
-    i = 0
 
+   
     if not GPIO.input(fire):
         print("Fire Alert")
         Blinking_led(red)
-        Buzzer()
-        t = "Fire Alert"
-        TelegramBot(t)
+        Buzzer(1)
+        TelegramBot()
         extinguish.IrrigationMotor()
-        i = 1
-    if i == 1:
-        sleep(5)
-        if GPIO.input(fire):
-            t = "Fire Extinguished"
-            TelegramBot(t)   
+        Buzzer(0)
+      
 def main():
-    print("firedetection started")
+    updater = Updater(keys.API_KEY,use_context=True)
+    dp = updater.dispatcher
+    j = updater.job_queue
     while True:
         Fire_detection()
 

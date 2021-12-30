@@ -1,8 +1,9 @@
+from telegram import update
+from telegram.ext import dispatcher, updater
 import RPi.GPIO as GPIO
 from time import sleep
 from telegram.ext import *
 import constants as keys
-from threading import Thread
 
 GPIO.cleanup()
 GPIO.setwarnings(False)
@@ -13,42 +14,34 @@ def Blinking_led(i): #input "i" is bcm(gpio) pin number of led, declair gpio pin
         GPIO.output(i,1)
         sleep(1)
         GPIO.output(i,0)
-        sleep(1)
 
-def Buzzer(): #input "i" is 1 == high and 0 == low to turn on and off buzzer
+def Buzzer(i): #input "i" is 1 == high and 0 == low to turn on and off buzzer
     buzzer = 27
     GPIO.setup(buzzer,GPIO.OUT)
-    for i in range(5):
-        GPIO.output(buzzer,1)
-        sleep(1)
-        GPIO.output(buzzer,0)
-        sleep(0.3)
+    GPIO.output(buzzer,i)
 
 def Motion_detect():
-    
+    print("motion function started")
     led = 18
     pir = 17
     GPIO.setup(pir,GPIO.IN)
     GPIO.setup(led,GPIO.OUT)
     i = GPIO.input(pir)
-    t1 = Thread(target=Buzzer)
-    t2 = Thread(target=Blinking_led,args=(led,))
     if i == 1:
         print("intruder detected")
-        t1.start()
-        t2.start()
+        Buzzer(1)
+        Blinking_led(led)
         TelegramBot()
+        Buzzer(0)
             
         i = 0
-        t1.join()
-        t2.join()
 
 def TelegramBot():
     updater = Updater(keys.API_KEY,use_context=True)
     dp = updater.dispatcher
-    j = updater.job_queue
+    j = updater.
     for i in keys.CHAT_ID:
-        updater.bot.send_message(chat_id = i, text ="intruder detected")
+        updater.bot.send_message(chat_id = i,.CHAT_ID, text ="intruder detected")
     
 
 
