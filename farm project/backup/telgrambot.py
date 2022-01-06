@@ -31,6 +31,4 @@ def Mainbotfunction():
     updater.start_polling()
     updater.idle()
 
-Thread(target=Mainbotfunction).start()
-Thread(target=fire.main).start()
-Thread(target=motion.main).start()
+Mainbotfunction()

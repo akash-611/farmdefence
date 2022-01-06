@@ -6,7 +6,7 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
 def IrrigationMotor(): 
-    motor = 9
+    motor = 2
     GPIO.setup(motor,GPIO.OUT)
     GPIO.output(motor,1)
     sleep(30)
