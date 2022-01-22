@@ -1,2 +1,2 @@
-API_KEY = '5042277552:AAHma2xSWwUZCuQbTF-e0zOviKLefsKh-g8'
-CHAT_ID = ["1128499007","1244459440"]
+API_KEY = 'your unique api key'
+CHAT_ID = ['list','of','chatID','of','people','you','want','to','add']
